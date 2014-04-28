@@ -5,6 +5,9 @@ use Vda\Query\Alias;
 use Vda\Query\IQueryProcessor;
 use Vda\Query\IExpression;
 
+/**
+ * @method Alias as($alias)
+ */
 abstract class AbstractOperator implements IExpression
 {
     private $mnemonic;

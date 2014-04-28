@@ -13,6 +13,13 @@ use Vda\Query\ResultAccumulator\ListAccumulator;
 use Vda\Query\ResultAccumulator\MapAccumulator;
 use Vda\Query\ResultAccumulator\SingleRowAccumulator;
 
+/**
+ * Class Select
+ *
+ * @method SourceAlias as($alias)
+ *
+ * @package Vda\Query
+ */
 class Select implements IExpression, IFieldList
 {
     private static $rc;
