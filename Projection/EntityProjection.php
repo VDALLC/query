@@ -18,7 +18,7 @@ class EntityProjection implements IProjection
         $entityFields = BeanUtil::listProperties($entityClass);
         foreach ($fields as $i => $field) {
             if ($field instanceof Field) {
-                $name = $field->getName();
+                $name = $field->getPropertyName();
             } elseif ($field instanceof Alias) {
                 $name = $field->getAlias();
             } else {
