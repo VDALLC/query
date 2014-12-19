@@ -13,6 +13,7 @@ interface IQueryProcessor
     public function processSelectQuery(Select $select);
     public function processInsertQuery(Insert $insert);
     public function processUpdateQuery(Update $update);
+    public function processUpsertQuery(Upsert $upsert);
     public function processDeleteQuery(Delete $delete);
     public function processField(Field $field);
     public function processTable(Table $table);

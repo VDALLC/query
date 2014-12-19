@@ -5,7 +5,7 @@
     "keywords": ["criterion", "query"],
     "require": {
         "php": ">=5.3.23",
-        "vda/util": "0.11.*"
+        "vda/util": "0.12.*"
     },
     "autoload": {
         "psr-0": { "": "" }

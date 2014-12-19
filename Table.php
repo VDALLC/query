@@ -2,9 +2,13 @@
 namespace Vda\Query;
 
 use Vda\Query\Key\ForeignKey;
+use Vda\Query\Key\PrimaryKey;
 
 abstract class Table implements IFieldList, IQueryPart, ISource
 {
+    /**
+     * @var PrimaryKey
+     */
     public $_primaryKey;
 
     private $_name;

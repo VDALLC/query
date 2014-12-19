@@ -1,7 +1,6 @@
 <?php
 namespace Vda\Query\Operator;
 
-use Vda\Util\Type;
 use Vda\Query\IQueryProcessor;
 
 class Mask extends AbstractOperator
