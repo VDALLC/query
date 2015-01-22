@@ -8,9 +8,8 @@
         "vda/util": "0.12.*"
     },
     "autoload": {
-        "psr-0": { "": "" }
+        "psr-4": { "Vda\\Query\\": "src/" }
     },
-    "target-dir": "Vda/Query",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
