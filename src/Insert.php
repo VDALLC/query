@@ -67,7 +67,9 @@ class Insert implements IQueryPart
     {
         $map = BeanUtil::toArray($bean);
 
-        foreach ($this->table->getFields() as $f) {
+        $fields = $this->fields ? : $this->table->getFields();
+
+        foreach ($fields as $f) {
             $propName = $f->getPropertyName();
             if (array_key_exists($propName, $map)) {
                 $this->set($f, $map[$propName]);
@@ -76,7 +78,6 @@ class Insert implements IQueryPart
 
         return $this;
     }
-
 
     public function select(Select $select)
     {
