@@ -17,6 +17,7 @@ class Insert implements IQueryPart
      */
     private $fields = array();
     private $values = array();
+    private $valuesIndex = 0;
     private $select;
 
     public static function insert()
@@ -40,7 +41,7 @@ class Insert implements IQueryPart
 
     public function values()
     {
-        $this->values = array();
+        $this->values[$this->valuesIndex] = array();
 
         foreach (func_get_args() as $i => $value) {
             if (isset($this->fields[$i])) {
@@ -49,7 +50,7 @@ class Insert implements IQueryPart
                 $type = Type::AUTO;
             }
 
-            $this->values[$i] = $this->normalize($value, $type);
+            $this->values[$this->valuesIndex][$i] = $this->normalize($value, $type);
         }
 
         return $this;
@@ -57,8 +58,10 @@ class Insert implements IQueryPart
 
     public function set(Field $field, $value)
     {
-        $this->fields[] = $field;
-        $this->values[] = $this->normalize($value, $field->getType());
+        if ($this->valuesIndex == 0) {
+            $this->fields[] = $field;
+        }
+        $this->values[$this->valuesIndex][] = $this->normalize($value, $field->getType());
 
         return $this;
     }
@@ -114,6 +117,13 @@ class Insert implements IQueryPart
     public function getSelect()
     {
         return $this->select;
+    }
+
+    public function batch()
+    {
+        $this->valuesIndex++;
+
+        return $this;
     }
 
     public function onProcess(IQueryProcessor $processor)
