@@ -4,6 +4,9 @@ namespace Vda\Query;
 use Vda\Query\Operator\CompositeOperator;
 use Vda\Query\Operator\Operator;
 
+/**
+ * @method Alias as(string $alias) Create an alias for this field
+ */
 class Field implements IExpression
 {
     private $type;
