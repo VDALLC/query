@@ -139,6 +139,15 @@ class Field implements IExpression
         return Operator::in($this, $exp);
     }
 
+    public function notin($exp)
+    {
+        if (!is_array($exp) && !($exp instanceof Select && func_num_args() == 1)) {
+            $exp = func_get_args();
+        }
+
+        return Operator::notin($this, $exp);
+    }
+
     public function neq($exp)
     {
         return Operator::neq($this, $exp);
