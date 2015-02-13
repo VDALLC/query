@@ -60,8 +60,15 @@ class Insert implements IQueryPart
     {
         if ($this->valuesIndex == 0) {
             $this->fields[] = $field;
+            $this->values[$this->valuesIndex][] = $this->normalize($value, $field->getType());
+        } else {
+            $index = array_search($field, $this->fields);
+            if ($index !== false) {
+                $this->values[$this->valuesIndex][$index] = $this->normalize($value, $field->getType());
+            } else {
+                throw new \InvalidArgumentException('Unable to add new insert field after addBatch() call');
+            }
         }
-        $this->values[$this->valuesIndex][] = $this->normalize($value, $field->getType());
 
         return $this;
     }
@@ -111,6 +118,8 @@ class Insert implements IQueryPart
 
     public function getValues()
     {
+        array_walk($this->values, 'ksort');
+
         return $this->values;
     }
 
@@ -119,7 +128,7 @@ class Insert implements IQueryPart
         return $this->select;
     }
 
-    public function batch()
+    public function addBatch()
     {
         $this->valuesIndex++;
 
