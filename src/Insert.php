@@ -17,6 +17,7 @@ class Insert implements IQueryPart
      */
     private $fields = array();
     private $values = array();
+    private $valuesIndex = 0;
     private $select;
 
     public static function insert()
@@ -40,7 +41,7 @@ class Insert implements IQueryPart
 
     public function values()
     {
-        $this->values = array();
+        $this->values[$this->valuesIndex] = array();
 
         foreach (func_get_args() as $i => $value) {
             if (isset($this->fields[$i])) {
@@ -49,7 +50,7 @@ class Insert implements IQueryPart
                 $type = Type::AUTO;
             }
 
-            $this->values[$i] = $this->normalize($value, $type);
+            $this->values[$this->valuesIndex][$i] = $this->normalize($value, $type);
         }
 
         return $this;
@@ -57,8 +58,17 @@ class Insert implements IQueryPart
 
     public function set(Field $field, $value)
     {
-        $this->fields[] = $field;
-        $this->values[] = $this->normalize($value, $field->getType());
+        if ($this->valuesIndex == 0) {
+            $this->fields[] = $field;
+            $this->values[$this->valuesIndex][] = $this->normalize($value, $field->getType());
+        } else {
+            $index = array_search($field, $this->fields);
+            if ($index !== false) {
+                $this->values[$this->valuesIndex][$index] = $this->normalize($value, $field->getType());
+            } else {
+                throw new \InvalidArgumentException("Can't add value for a field not present in a first batch");
+            }
+        }
 
         return $this;
     }
@@ -67,7 +77,9 @@ class Insert implements IQueryPart
     {
         $map = BeanUtil::toArray($bean);
 
-        foreach ($this->table->getFields() as $f) {
+        $fields = $this->fields ? : $this->table->getFields();
+
+        foreach ($fields as $f) {
             $propName = $f->getPropertyName();
             if (array_key_exists($propName, $map)) {
                 $this->set($f, $map[$propName]);
@@ -76,7 +88,6 @@ class Insert implements IQueryPart
 
         return $this;
     }
-
 
     public function select(Select $select)
     {
@@ -107,12 +118,21 @@ class Insert implements IQueryPart
 
     public function getValues()
     {
+        array_walk($this->values, 'ksort');
+
         return $this->values;
     }
 
     public function getSelect()
     {
         return $this->select;
+    }
+
+    public function addBatch()
+    {
+        $this->valuesIndex++;
+
+        return $this;
     }
 
     public function onProcess(IQueryProcessor $processor)
