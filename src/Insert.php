@@ -66,7 +66,7 @@ class Insert implements IQueryPart
             if ($index !== false) {
                 $this->values[$this->valuesIndex][$index] = $this->normalize($value, $field->getType());
             } else {
-                throw new \InvalidArgumentException('Unable to add new insert field after addBatch() call');
+                throw new \InvalidArgumentException("Can't add value for a field not present in a first batch");
             }
         }
 
