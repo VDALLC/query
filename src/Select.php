@@ -73,7 +73,7 @@ class Select implements IExpression, IFieldList
                 $this->fields[] = $arg;
             } else {
                 throw new \InvalidArgumentException(
-                    'Select expression must an instance of Vda\Query\IExpression'
+                    'Select expression must be an instance of Vda\Query\IExpression'
                 );
             }
         }
