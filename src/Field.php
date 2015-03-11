@@ -22,12 +22,14 @@ class Field implements IExpression
         $this->scope = $scope;
     }
 
-    public function init($propertyName, ISource $scope)
+    public function init($fieldName, ISource $scope)
     {
-        $this->propertyName = $propertyName;
+        if ($this->propertyName === null) {
+            $this->propertyName = $fieldName;
+        }
 
         if ($this->name === null) {
-            $this->name = $propertyName;
+            $this->name = $fieldName;
         }
 
         $this->scope = $scope;
