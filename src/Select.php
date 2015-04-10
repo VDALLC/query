@@ -22,6 +22,10 @@ use Vda\Query\ResultAccumulator\SingleRowAccumulator;
  */
 class Select implements IExpression, IFieldList
 {
+    const LOCK_NONE         = 0;
+    const LOCK_FOR_UPDATE   = 1;
+    const LOCK_FOR_SHARE    = 2;
+
     private static $rc;
 
     /**
@@ -57,6 +61,17 @@ class Select implements IExpression, IFieldList
     private $resultAccumulator;
 
     private $projection;
+
+    /**
+     * Select lock mode.
+     *
+     * See http://www.postgresql.org/docs/9.0/static/sql-select.html and
+     * http://www.jooq.org/doc/3.0/manual/sql-building/sql-statements/select-statement/for-update-clause/
+     * for future development.
+     *
+     * @var int
+     */
+    private $lock = self::LOCK_NONE;
 
     /**
      * @param IExpression...
@@ -229,6 +244,20 @@ class Select implements IExpression, IFieldList
         return $this->singleRow()->singleColumn($fieldNum);
     }
 
+    public function forUpdate()
+    {
+        $this->lock = self::LOCK_FOR_UPDATE;
+
+        return $this;
+    }
+
+    public function forShare()
+    {
+        $this->lock = self::LOCK_FOR_SHARE;
+
+        return $this;
+    }
+
     public function _as($alias)
     {
         return new SourceAlias($this, $alias);
@@ -323,6 +352,11 @@ class Select implements IExpression, IFieldList
         $this->offset($filter->getOffset());
 
         return $this;
+    }
+
+    public function getLockMode()
+    {
+        return $this->lock;
     }
 
     private function _join($type, ISource $right, $on)
