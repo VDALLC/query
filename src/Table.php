@@ -11,6 +11,8 @@ abstract class Table implements IFieldList, IQueryPart, ISource
      */
     public $_primaryKey;
 
+    protected $_schema;
+
     private $_name;
     private $_alias;
 
@@ -65,6 +67,11 @@ abstract class Table implements IFieldList, IQueryPart, ISource
         return isset($this->_foreignKeys[$refTableClass])
             ? $this->_foreignKeys[$refTableClass]
             : null;
+    }
+
+    public function getSchema()
+    {
+        return $this->_schema;
     }
 
     public function getName()
