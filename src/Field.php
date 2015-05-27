@@ -182,6 +182,6 @@ class Field implements IExpression
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processField($this);
+        return $processor->processField($this);
     }
 }

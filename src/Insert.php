@@ -137,7 +137,7 @@ class Insert implements IQueryPart
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processInsertQuery($this);
+        return $processor->processInsertQuery($this);
     }
 
     private function normalize($value, $type)

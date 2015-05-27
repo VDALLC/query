@@ -132,7 +132,7 @@ class Upsert implements IQueryPart
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processUpsertQuery($this);
+        return $processor->processUpsertQuery($this);
     }
 
     private function normalize($value, $type)

@@ -67,6 +67,6 @@ class Delete implements IQueryPart
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processDeleteQuery($this);
+        return $processor->processDeleteQuery($this);
     }
 }

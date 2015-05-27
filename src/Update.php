@@ -101,6 +101,6 @@ class Update implements IQueryPart
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processUpdateQuery($this);
+        return $processor->processUpdateQuery($this);
     }
 }

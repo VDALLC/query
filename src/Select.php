@@ -275,7 +275,7 @@ class Select implements IExpression, IFieldList
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processSelectQuery($this);
+        return $processor->processSelectQuery($this);
     }
 
     public function getSources()

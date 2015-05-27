@@ -40,6 +40,6 @@ class JoinClause implements IQueryPart
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processJoin($this);
+        return $processor->processJoin($this);
     }
 }

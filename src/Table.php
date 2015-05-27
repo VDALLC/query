@@ -86,7 +86,7 @@ abstract class Table implements IFieldList, IQueryPart, ISource
 
     public function onProcess(IQueryProcessor $processor)
     {
-        $processor->processTable($this);
+        return $processor->processTable($this);
     }
 
     private function loadFields($init)
