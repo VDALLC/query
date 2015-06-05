@@ -50,14 +50,6 @@ class Delete implements IQueryPart
     }
 
     /**
-     * @return IExpression[]
-     */
-    public function getExpressions()
-    {
-        return $this->expressions;
-    }
-
-    /**
      * @return IExpression
      */
     public function getCriteria()
