@@ -41,7 +41,7 @@ abstract class Table implements IFieldList, IQueryPart, ISource
             $this->loadFields(false);
         }
 
-        return $this->_fields;
+        return array_values($this->_fields);
     }
 
     public function getField($name)
@@ -98,14 +98,20 @@ abstract class Table implements IFieldList, IQueryPart, ISource
                 continue;
             }
 
-            $name = $p->getName();
-            $field = $p->getValue($this);
+            $this->registerProperty($p->getValue($this), $p->getName(), $init);
+        }
+    }
 
-            if ($field instanceof ForeignKey) {
-                $this->registerForeignKey($field, $init);
-            } elseif ($field instanceof Field) {
-                $this->registerField($field, $name, $init);
+    private function registerProperty($property, $name, $init)
+    {
+        if (is_array($property)) {
+            foreach ($property as $k => $v) {
+                $this->registerProperty($v, $name . '.' . $k, $init);
             }
+        } elseif ($property instanceof ForeignKey) {
+            $this->registerForeignKey($property, $init);
+        } elseif ($property instanceof Field) {
+            $this->registerField($property, $name, $init);
         }
     }
 
