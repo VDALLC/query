@@ -5,6 +5,12 @@ use Vda\Query\IQueryProcessor;
 
 class FunctionCall extends AbstractOperator
 {
+    const FUNCTION_MIN   = 'min';
+    const FUNCTION_MAX   = 'max';
+    const FUNCTION_SUM   = 'sum';
+    const FUNCTION_AVG   = 'avg';
+    const FUNCTION_COUNT = 'count';
+
     private $funcName;
     private $args;
 

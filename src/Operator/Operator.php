@@ -65,7 +65,7 @@ final class Operator
     {
         $arg = is_null($arg) ? array() : array($arg);
 
-        return self::call('count', $arg);
+        return self::call(FunctionCall::FUNCTION_COUNT, $arg);
     }
 
     /**
@@ -78,12 +78,22 @@ final class Operator
      */
     public static function sum($arg)
     {
-        return self::call('sum', array($arg));
+        return self::call(FunctionCall::FUNCTION_SUM, array($arg));
     }
 
     public static function avg($arg)
     {
-        return self::call('avg', array($arg));
+        return self::call(FunctionCall::FUNCTION_AVG, array($arg));
+    }
+
+    public static function min($arg)
+    {
+        return self::call(FunctionCall::FUNCTION_MIN, array($arg));
+    }
+
+    public static function max($arg)
+    {
+        return self::call(FunctionCall::FUNCTION_MAX, array($arg));
     }
 
     public static function call($funcName, array $args = array())
