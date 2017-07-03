@@ -92,6 +92,8 @@ abstract class Table implements IFieldList, IQueryPart, ISource
     private function loadFields($init)
     {
         $rc = new \ReflectionClass($this);
+        
+        $this->_foreignKeys = array();
 
         foreach ($rc->getProperties() as $p) {
             if (!$p->isPublic() || $p->isStatic()) {
