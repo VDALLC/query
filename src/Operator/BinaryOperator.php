@@ -1,7 +1,6 @@
 <?php
 namespace Vda\Query\Operator;
 
-use Vda\Query\IExpression;
 use Vda\Query\IQueryProcessor;
 
 final class BinaryOperator extends AbstractOperator

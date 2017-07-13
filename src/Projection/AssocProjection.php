@@ -3,7 +3,6 @@ namespace Vda\Query\Projection;
 
 use Vda\Query\Alias;
 use Vda\Query\Field;
-use Vda\Util\BeanUtil;
 
 class AssocProjection implements IProjection
 {

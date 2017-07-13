@@ -5,9 +5,9 @@ class PrimaryKey
 {
     private $fields;
 
-    public function __construct($keyField)
+    public function __construct(...$keyFields)
     {
-        $this->fields = func_get_args();
+        $this->fields = $keyFields;
     }
 
     public function getFields()

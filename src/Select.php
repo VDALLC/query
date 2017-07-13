@@ -65,10 +65,8 @@ class Select implements IExpression, IFieldList
     /**
      * Select lock mode.
      *
-     * See http://www.postgresql.org/docs/9.0/static/sql-select.html and
-     * http://www.jooq.org/doc/3.0/manual/sql-building/sql-statements/select-statement/for-update-clause/
-     * for future development.
-     *
+     * @see http://www.postgresql.org/docs/9.0/static/sql-select.html
+     * @see http://www.jooq.org/doc/3.0/manual/sql-building/sql-statements/select-statement/for-update-clause/
      * @var int
      */
     private $lock = self::LOCK_NONE;
@@ -78,17 +76,17 @@ class Select implements IExpression, IFieldList
      */
     public function __construct()
     {
-        $this->sources = array();
-        $this->fields  = array();
+        $this->sources = [];
+        $this->fields  = [];
 
-        foreach (func_get_args() as $arg) {
+        foreach (\func_get_args() as $arg) {
             if ($arg instanceof Table) {
                 $this->fields = array_merge($this->fields, $arg->getFields());
             } elseif ($arg instanceof IExpression) {
                 $this->fields[] = $arg;
             } else {
                 throw new \InvalidArgumentException(
-                    'Select expression must be an instance of Vda\Query\IExpression'
+                    'Select expression must be an instance of ' . IExpression::class
                 );
             }
         }
@@ -97,38 +95,29 @@ class Select implements IExpression, IFieldList
     }
 
     /**
-     * @return Select
+     * @param IExpression...
+     * @return self
      */
     public static function select()
     {
-        if (empty(self::$rc)) {
-            self::$rc = new \ReflectionClass(__CLASS__);
-        }
-
-        return self::$rc->newInstanceArgs(func_get_args());
+        return new self(...\func_get_args());
     }
 
     /**
      * @param ISource... $exp
      * @return self
      */
-    public function from(ISource $source)
+    public function from(ISource ...$source)
     {
-        foreach (func_get_args() as $src) {
-            if (!($src instanceof ISource)) {
-                throw new \InvalidArgumentException(
-                    'Source must be an instance of Vda\Query\ISource'
-                );
-            }
-
+        foreach ($source as $src) {
             $this->sources[] = $src;
 
             if ($this->detectFields) {
-                $this->fields = array_merge($this->fields, $src->getFields());
+                $this->fields = \array_merge($this->fields, $src->getFields());
             }
         }
 
-        $this->reversedSources = array_reverse($this->sources);
+        $this->reversedSources = \array_reverse($this->sources);
 
         return $this;
     }
@@ -136,44 +125,48 @@ class Select implements IExpression, IFieldList
     /**
      * @param ISource $target
      * @param IExpression|OneToN|ManyToMany|bool $on
-     * @return $this
+     * @return self
      */
     public function join(ISource $target, $on = false)
     {
         return $this->_join(JoinClause::TYPE_INNER, $target, $on);
     }
 
+    /**
+     * @param ISource $target
+     * @param IExpression|OneToN|ManyToMany|false $on
+     * @return self
+     */
     public function leftJoin(ISource $target, $on = false)
     {
         return $this->_join(JoinClause::TYPE_LEFT, $target, $on);
     }
 
-    public function where($criteria)
+    /**
+     * @param IExpression ...$criteria|null
+     * @return self
+     */
+    public function where(...$criteria)
     {
-        if (func_num_args() > 1) {
-            $criteria = func_get_args();
-        }
-
-        if (!is_array($criteria)) {
-            $this->criteria = $criteria;
+        if (count($criteria) == 1) {
+            $this->criteria = $criteria[0];
         } else {
-            $this->criteria = Operator::andOp();
-            $this->criteria->resetOperands($criteria);
+            $this->criteria = Operator::andOp(...$criteria);
         }
 
         return $this;
     }
 
-    public function groupBy($field)
+    public function groupBy(...$field)
     {
-        $this->groups = is_array($field) ? $field : func_get_args();
+        $this->groups = is_array($field[0]) ? $field[0] : $field;
 
         return $this;
     }
 
-    public function orderBy($order)
+    public function orderBy(...$order)
     {
-        $this->orders = is_array($order) ? $order : func_get_args();
+        $this->orders = is_array($order[0]) ? $order[0] : $order;
 
         return $this;
     }
@@ -263,14 +256,16 @@ class Select implements IExpression, IFieldList
         return new SourceAlias($this, $alias);
     }
 
-    //TODO Get rid of this once PHP is fixed to allow keywords as method names
+    //TODO Get rid of this method upon migration to PHP 7
     public function __call($method, $args)
     {
         if ($method === 'as') {
             return $this->_as($args[0]);
         }
 
-        trigger_error('Call to undefined method ' . __CLASS__ . '::' . $method, E_USER_ERROR);
+        throw new \RuntimeException('
+            Call to undefined method ' . self::class . '::' . $method
+        );
     }
 
     public function onProcess(IQueryProcessor $processor)
@@ -346,10 +341,10 @@ class Select implements IExpression, IFieldList
 
     public function filter(Filter $filter)
     {
-        $this->where($filter->getCriterion());
-        $this->orderBy($filter->getOrder());
-        $this->limit($filter->getLimit());
-        $this->offset($filter->getOffset());
+        $this->criteria = $filter->getCriterion();
+        $this->orders = $filter->getOrder() ?: null;
+        $this->limit = $filter->getLimit();
+        $this->offset = $filter->getOffset();
 
         return $this;
     }
@@ -397,7 +392,7 @@ class Select implements IExpression, IFieldList
     private function findLeftJoinTarget($targetClass)
     {
         foreach ($this->reversedSources as $s) {
-            if (get_class($s) == $targetClass) {
+            if (\get_class($s) == $targetClass) {
                 return $s;
             }
         }
@@ -424,7 +419,7 @@ class Select implements IExpression, IFieldList
     {
         if ($on->getTable() === $right) {
             $left = $this->findLeftJoinTarget($on->getTargetClass());
-            $jc = array_flip($on->getJoinColumns());
+            $jc = \array_flip($on->getJoinColumns());
         } elseif (get_class($right) == $on->getTargetClass()) {
             $left = $on->getTable();
             $this->checkLeftJoinTarget($left);
@@ -448,7 +443,7 @@ class Select implements IExpression, IFieldList
 
     private function addJoinClause($type, $target, $criterion)
     {
-        array_unshift($this->reversedSources, $target);
+        \array_unshift($this->reversedSources, $target);
 
         $this->sources[] = new JoinClause($type, $target, $criterion);
 

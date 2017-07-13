@@ -6,47 +6,29 @@ use Vda\Query\Operator\Operator;
 class Filter
 {
     protected $criterion;
-    protected $order = array();
+    protected $order = [];
     protected $limit;
     protected $offset;
 
-    public function andWhere(IExpression $criterion)
+    public function andWhere(IExpression ...$criteria)
     {
         if (empty($this->criterion)) {
-            $this->criterion = $this->argsToCriterion(func_get_args());
+            $this->criterion = $this->argsToCriteria(...$criteria);
         } else {
-            $this->criterion = Operator::andOp(
-                $this->criterion,
-                $this->argsToCriterion(func_get_args())
-            );
+            $this->criterion = $this->argsToCriteria($this->criterion, ...$criteria);
         }
     }
 
     /**
      * Add number of anded criteria
      *
-     * @param Expression $ex, ...
+     * @param IExpression $ex, ...
      */
-    public function where(IExpression $criterion)
+    public function where(IExpression ...$criteria)
     {
-        $this->criterion = $this->argsToCriterion(func_get_args());
+        $this->criterion = $this->argsToCriteria(...$criteria);
 
         return $this;
-    }
-
-    private function argsToCriterion(array $args)
-    {
-        if (count($args) == 0) {
-            return null;
-        } elseif (count($args) == 1) {
-            return $args[0];
-        } else {
-            $res = Operator::andOp();
-            foreach ($args as $op) {
-                $res->addOperand($op);
-            }
-            return $res;
-        }
     }
 
     /**
@@ -60,9 +42,9 @@ class Filter
     /**
      * @param Order $order,...
      */
-    public function orderBy(Order $order)
+    public function orderBy(Order ...$order)
     {
-        $this->order = func_get_args();
+        $this->order = $order;
 
         return $this;
     }
@@ -97,5 +79,14 @@ class Filter
     public function getOffset()
     {
         return $this->offset;
+    }
+
+    private function argsToCriteria(IExpression ...$args)
+    {
+        if (count($args) == 1) {
+            return $args[0];
+        }
+
+        return Operator::andOp(...$args);
     }
 }

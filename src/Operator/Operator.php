@@ -187,7 +187,7 @@ final class Operator
     /**
      * Case insensitive pattern match
      *
-     * @see Expression::match()
+     * @see Operator::match() For pattern format
      */
     public static function matchi($operand1, $operand2)
     {
@@ -201,7 +201,7 @@ final class Operator
     /**
      * Negated case sensitive pattern match
      *
-     * @see Expression::match()
+     * @see Operator::match() For pattern format
      */
     public static function notmatch($operand1, $operand2)
     {
@@ -215,7 +215,7 @@ final class Operator
     /**
      * Negated case insensitive pattern match
      *
-     * @see Expression::match()
+     * @see Operator::match() For pattern format
      */
     public static function notmatchi($operand1, $operand2)
     {

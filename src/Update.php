@@ -54,15 +54,13 @@ class Update implements IQueryPart
         return $this;
     }
 
-    public function where(IExpression $criteria)
+    public function where(IExpression ...$criteria)
     {
-        if (func_num_args() > 1) {
-            $criteria = Operator::andOp();
-
-            $criteria->resetOperands(func_get_args());
+        if (count($criteria) == 1) {
+            $this->criteria = $criteria[0];
+        } else {
+            $this->criteria = Operator::andOp(...$criteria);
         }
-
-        $this->criteria = $criteria;
 
         return $this;
     }

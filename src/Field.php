@@ -36,7 +36,7 @@ class Field implements IExpression
     }
 
     /**
-     * @return enum Type
+     * @return integer
      */
     public function getType()
     {
@@ -132,19 +132,19 @@ class Field implements IExpression
         return Operator::notmatchi($this, $exp);
     }
 
-    public function in($exp)
+    public function in(...$exp)
     {
-        if (!is_array($exp) && !($exp instanceof Select && func_num_args() == 1)) {
-            $exp = func_get_args();
+        if (is_array($exp[0]) || ($exp[0] instanceof Select && count($exp) == 1)) {
+            $exp = $exp[0];
         }
 
         return Operator::in($this, $exp);
     }
 
-    public function notin($exp)
+    public function notin(...$exp)
     {
-        if (!is_array($exp) && !($exp instanceof Select && func_num_args() == 1)) {
-            $exp = func_get_args();
+        if (is_array($exp[0]) || ($exp[0] instanceof Select && count($exp) == 1)) {
+            $exp = $exp[0];
         }
 
         return Operator::notin($this, $exp);

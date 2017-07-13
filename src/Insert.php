@@ -15,8 +15,8 @@ class Insert implements IQueryPart
     /**
      * @var Field[]
      */
-    private $fields = array();
-    private $values = array();
+    private $fields = [];
+    private $values = [];
     private $valuesIndex = 0;
     private $select;
 
@@ -32,25 +32,25 @@ class Insert implements IQueryPart
         return $this;
     }
 
-    public function fields()
+    public function fields(Field ...$fields)
     {
-        $this->fields = func_get_args();
+        $this->fields = $fields;
 
         return $this;
     }
 
-    public function values()
+    public function values(...$value)
     {
-        $this->values[$this->valuesIndex] = array();
+        $this->values[$this->valuesIndex] = [];
 
-        foreach (func_get_args() as $i => $value) {
+        foreach ($value as $i => $val) {
             if (isset($this->fields[$i])) {
                 $type = $this->fields[$i]->getType();
             } else {
                 $type = Type::AUTO;
             }
 
-            $this->values[$this->valuesIndex][$i] = $this->normalize($value, $type);
+            $this->values[$this->valuesIndex][$i] = $this->normalize($val, $type);
         }
 
         return $this;
@@ -66,7 +66,9 @@ class Insert implements IQueryPart
             if ($index !== false) {
                 $this->values[$this->valuesIndex][$index] = $this->normalize($value, $field->getType());
             } else {
-                throw new \InvalidArgumentException("Can't add value for a field not present in a first batch");
+                throw new \InvalidArgumentException(
+                    "Can't add value for a field not present in a first batch"
+                );
             }
         }
 
