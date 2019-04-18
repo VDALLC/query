@@ -1,8 +1,8 @@
 <?php
 namespace Vda\Query\Operator;
 
-use Vda\Util\Type;
 use Vda\Query\IQueryProcessor;
+use Vda\Util\Type;
 
 class Constant extends AbstractOperator
 {
@@ -39,7 +39,7 @@ class Constant extends AbstractOperator
 
     public static function toString($value, $type = Type::STRING)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return 'null';
         }
 
@@ -57,9 +57,9 @@ class Constant extends AbstractOperator
         }
 
         if ($isArray) {
-            return '[' . join(', ', array_map($render, $value)) . ']';
+            return '[' . \join(', ', $render($value)) . ']';
         } else {
-            return call_user_func($render, $value);
+            return $render($value);
         }
     }
 
@@ -70,7 +70,7 @@ class Constant extends AbstractOperator
 
     private static function renderString($value)
     {
-        return "'" . addslashes($value) . "'";
+        return "'" . \addslashes($value) . "'";
     }
 
     private static function renderDefault($value)

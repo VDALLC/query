@@ -10,7 +10,7 @@ class AssocProjection implements IProjection
 
     public function __construct($fields)
     {
-        $this->fieldIndicies = array();
+        $this->fieldIndicies = [];
 
         foreach ($fields as $i => $field) {
             if ($field instanceof Field) {
@@ -27,7 +27,7 @@ class AssocProjection implements IProjection
 
     public function project(array $tuple)
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->fieldIndicies as $idx => $name) {
             $result[$name] = $tuple[$idx];

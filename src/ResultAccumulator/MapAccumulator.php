@@ -12,13 +12,13 @@ class MapAccumulator implements IResultAccumulator
     public function __construct($fieldNum)
     {
         $this->fieldNum = $fieldNum;
-        $this->result = array();
+        $this->result = [];
     }
 
     public function reset(IProjection $projection = null)
     {
         $this->rowProjection = $projection;
-        $this->result = array();
+        $this->result = [];
     }
 
     public function accumulate(array $tuple)

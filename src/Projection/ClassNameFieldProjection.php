@@ -27,7 +27,7 @@ class ClassNameFieldProjection implements IProjection
 
     public function project(array $tuple)
     {
-        if (class_exists($tuple[$this->fieldIndex])) {
+        if (\class_exists($tuple[$this->fieldIndex])) {
             $class = $tuple[$this->fieldIndex];
         } else {
             $class = $this->dao->_entityClass;

@@ -6,16 +6,11 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://composer.vda-team.com/",
-            "options": {
-                "ssl": {
-                    "verify_peer": false
-                }
-            }
+            "url": "https://composer.vda-team.com/"
         }
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.0.0",
         "vda/util": "0.12.*"
     },
     "autoload": {

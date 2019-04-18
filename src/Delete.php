@@ -15,14 +15,14 @@ class Delete implements IQueryPart
 
     public function from(Table $table)
     {
-        $this->tables = array($table);
+        $this->tables = [$table];
 
         return $this;
     }
 
     public function where(IExpression ...$criteria)
     {
-        if (count($criteria) == 1) {
+        if (\count($criteria) == 1) {
             $this->criteria = $criteria[0];
         } else {
             $this->criteria = Operator::andOp(...$criteria);
@@ -47,10 +47,7 @@ class Delete implements IQueryPart
         return $this->fields;
     }
 
-    /**
-     * @return IExpression
-     */
-    public function getCriteria()
+    public function getCriteria(): ?IExpression
     {
         return $this->criteria;
     }

@@ -10,13 +10,13 @@ class ListAccumulator implements IResultAccumulator
 
     public function __construct()
     {
-        $this->result = array();
+        $this->result = [];
     }
 
     public function reset(IProjection $projection)
     {
         $this->rowProjection = $projection;
-        $this->result = array();
+        $this->result = [];
     }
 
     public function accumulate(array $tuple)

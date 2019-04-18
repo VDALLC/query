@@ -8,7 +8,7 @@ final class CompositeOperator extends AbstractOperator
 {
     private $operands;
 
-    public function __construct($mnemonic, array $operands = array())
+    public function __construct($mnemonic, array $operands = [])
     {
         parent::__construct($mnemonic);
 
@@ -27,7 +27,7 @@ final class CompositeOperator extends AbstractOperator
 
     public function resetOperands(array $operands)
     {
-        $this->operands = array_map(array($this, 'normalizeOperand'), $operands);
+        $this->operands = \array_map([$this, 'normalizeOperand'], $operands);
     }
 
     public function onProcess(IQueryProcessor $processor)
@@ -37,6 +37,6 @@ final class CompositeOperator extends AbstractOperator
 
     public function __toString()
     {
-        return '(' . join(" {$this->getMnemonic()} ", $this->operands) . ')';
+        return '(' . \join(" {$this->getMnemonic()} ", $this->operands) . ')';
     }
 }

@@ -13,7 +13,7 @@ class EntityProjection implements IProjection
     public function __construct($entityClass, $fields)
     {
         $this->entityClass = $entityClass;
-        $this->fieldIndices = array();
+        $this->fieldIndices = [];
 
         $entityFields = BeanUtil::listProperties($entityClass);
         foreach ($fields as $i => $field) {
@@ -25,7 +25,7 @@ class EntityProjection implements IProjection
                 continue;
             }
 
-            if (in_array($name, $entityFields)) {
+            if (\in_array($name, $entityFields)) {
                 $this->fieldIndices[$i] = $name;
             }
         }
@@ -37,7 +37,7 @@ class EntityProjection implements IProjection
 
         foreach ($this->fieldIndices as $idx => $name) {
             $method = 'set' . $name;
-            if (method_exists($result, $method)) {
+            if (\method_exists($result, $method)) {
                 $result->{$method}($tuple[$idx]);
             } else {
                 $result->$name = $tuple[$idx];

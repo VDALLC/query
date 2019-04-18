@@ -15,10 +15,7 @@ final class UnaryOperator extends AbstractOperator
         $this->operand = $operand;
     }
 
-    /**
-     * @return IExpression
-     */
-    public function getOperand()
+    public function getOperand(): IExpression
     {
         return $this->operand;
     }

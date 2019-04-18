@@ -19,7 +19,7 @@ class FunctionCall extends AbstractOperator
         parent::__construct($mnemonic);
 
         $this->funcName = $funcName;
-        $this->args = array_map(array($this, 'normalizeOperand'), $args);
+        $this->args = \array_map([$this, 'normalizeOperand'], $args);
     }
 
     public function getName()
@@ -39,6 +39,6 @@ class FunctionCall extends AbstractOperator
 
     public function __toString()
     {
-        return "{$this->funcName}(" . join(', ', $this->args) . ')';
+        return "{$this->funcName}(" . \join(', ', $this->args) . ')';
     }
 }

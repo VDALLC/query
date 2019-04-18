@@ -37,11 +37,11 @@ abstract class Table implements IFieldList, IQueryPart, ISource
      */
     public function getFields()
     {
-        if (is_null($this->_fields)) {
+        if ($this->_fields === null) {
             $this->loadFields(false);
         }
 
-        return array_values($this->_fields);
+        return \array_values($this->_fields);
     }
 
     public function getField($name)
@@ -51,7 +51,7 @@ abstract class Table implements IFieldList, IQueryPart, ISource
 
     public function getForeignKeys()
     {
-        if (is_null($this->_foreignKeys)) {
+        if ($this->_foreignKeys === null) {
             $this->loadFields(false);
         }
 
@@ -60,7 +60,7 @@ abstract class Table implements IFieldList, IQueryPart, ISource
 
     public function getForeignKey($refTableClass)
     {
-        if (is_null($this->_foreignKeys)) {
+        if ($this->_foreignKeys === null) {
             $this->loadFields(false);
         }
 
@@ -92,8 +92,8 @@ abstract class Table implements IFieldList, IQueryPart, ISource
     private function loadFields($init)
     {
         $rc = new \ReflectionClass($this);
-        
-        $this->_foreignKeys = array();
+
+        $this->_foreignKeys = [];
 
         foreach ($rc->getProperties() as $p) {
             if (!$p->isPublic() || $p->isStatic()) {
@@ -106,7 +106,7 @@ abstract class Table implements IFieldList, IQueryPart, ISource
 
     private function registerProperty($property, $name, $init)
     {
-        if (is_array($property)) {
+        if (\is_array($property)) {
             foreach ($property as $k => $v) {
                 $this->registerProperty($v, $name . '.' . $k, $init);
             }

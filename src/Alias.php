@@ -6,18 +6,18 @@ class Alias implements IExpression
     private $expression;
     private $alias;
 
-    public function __construct(IExpression $expression, $alias)
+    public function __construct(IExpression $expression, string $alias)
     {
         $this->expression = $expression;
         $this->alias = $alias;
     }
 
-    public function getExpression()
+    public function getExpression(): IExpression
     {
         return $this->expression;
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return $this->alias;
     }

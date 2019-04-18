@@ -11,7 +11,7 @@ class ManyToMany extends ForeignKey
     {
         parent::__construct($targetClass, $table);
 
-        $this->joinTableClass = ltrim($joinTableClass, '\\');
+        $this->joinTableClass = \ltrim($joinTableClass, '\\');
     }
 
     /**

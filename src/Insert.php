@@ -62,7 +62,7 @@ class Insert implements IQueryPart
             $this->fields[] = $field;
             $this->values[$this->valuesIndex][] = $this->normalize($value, $field->getType());
         } else {
-            $index = array_search($field, $this->fields);
+            $index = \array_search($field, $this->fields);
             if ($index !== false) {
                 $this->values[$this->valuesIndex][$index] = $this->normalize($value, $field->getType());
             } else {
@@ -83,7 +83,7 @@ class Insert implements IQueryPart
 
         foreach ($fields as $f) {
             $propName = $f->getPropertyName();
-            if (array_key_exists($propName, $map)) {
+            if (\array_key_exists($propName, $map)) {
                 $this->set($f, $map[$propName]);
             }
         }
@@ -120,7 +120,7 @@ class Insert implements IQueryPart
 
     public function getValues()
     {
-        array_walk($this->values, 'ksort');
+        \array_walk($this->values, 'ksort');
 
         return $this->values;
     }

@@ -7,9 +7,9 @@ class Mask extends AbstractOperator
 {
     private $mask;
 
-    public static function quoteWildcards($value)
+    public static function quoteWildcards(string $value)
     {
-        return addcslashes($value, '\\?*');
+        return \addcslashes($value, '\\?*');
     }
 
     public function __construct($mnemonic, $mask)

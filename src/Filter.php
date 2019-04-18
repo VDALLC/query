@@ -12,11 +12,11 @@ class Filter
 
     public function andWhere(IExpression ...$criteria)
     {
-        if (empty($this->criterion)) {
-            $this->criterion = $this->argsToCriteria(...$criteria);
-        } else {
-            $this->criterion = $this->argsToCriteria($this->criterion, ...$criteria);
+        if (!empty($this->criterion)) {
+            \array_unshift($criteria, $this->criterion);
         }
+
+        $this->criterion = $this->argsToCriteria($criteria);
     }
 
     /**
@@ -26,7 +26,7 @@ class Filter
      */
     public function where(IExpression ...$criteria)
     {
-        $this->criterion = $this->argsToCriteria(...$criteria);
+        $this->criterion = $this->argsToCriteria($criteria);
 
         return $this;
     }
@@ -81,9 +81,9 @@ class Filter
         return $this->offset;
     }
 
-    private function argsToCriteria(IExpression ...$args)
+    private function argsToCriteria($args)
     {
-        if (count($args) == 1) {
+        if (\count($args) == 1) {
             return $args[0];
         }
 

@@ -17,9 +17,9 @@ class Update implements IQueryPart
 
     public function __construct(Table $table)
     {
-        $this->tables = array($table);
-        $this->fields = array();
-        $this->expressions = array();
+        $this->tables = [$table];
+        $this->fields = [];
+        $this->expressions = [];
     }
 
     public static function update(Table $table)
@@ -46,7 +46,7 @@ class Update implements IQueryPart
 
         foreach ($this->tables[0]->getFields() as $f) {
             $propName = $f->getPropertyName();
-            if (array_key_exists($propName, $map)) {
+            if (\array_key_exists($propName, $map)) {
                 $this->set($f, $map[$propName]);
             }
         }
@@ -56,7 +56,7 @@ class Update implements IQueryPart
 
     public function where(IExpression ...$criteria)
     {
-        if (count($criteria) == 1) {
+        if (\count($criteria) == 1) {
             $this->criteria = $criteria[0];
         } else {
             $this->criteria = Operator::andOp(...$criteria);

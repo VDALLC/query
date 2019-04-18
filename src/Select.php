@@ -74,14 +74,14 @@ class Select implements IExpression, IFieldList
     /**
      * @param IExpression...
      */
-    public function __construct()
+    public function __construct(...$args)
     {
         $this->sources = [];
         $this->fields  = [];
 
-        foreach (\func_get_args() as $arg) {
+        foreach ($args as $arg) {
             if ($arg instanceof Table) {
-                $this->fields = array_merge($this->fields, $arg->getFields());
+                $this->fields = \array_merge($this->fields, $arg->getFields());
             } elseif ($arg instanceof IExpression) {
                 $this->fields[] = $arg;
             } else {
@@ -98,9 +98,9 @@ class Select implements IExpression, IFieldList
      * @param IExpression...
      * @return self
      */
-    public static function select()
+    public static function select(...$args)
     {
-        return new self(...\func_get_args());
+        return new self(...$args);
     }
 
     /**
@@ -148,7 +148,7 @@ class Select implements IExpression, IFieldList
      */
     public function where(...$criteria)
     {
-        if (count($criteria) == 1) {
+        if (\count($criteria) == 1) {
             $this->criteria = $criteria[0];
         } else {
             $this->criteria = Operator::andOp(...$criteria);
@@ -159,14 +159,14 @@ class Select implements IExpression, IFieldList
 
     public function groupBy(...$field)
     {
-        $this->groups = is_array($field[0]) ? $field[0] : $field;
+        $this->groups = \is_array($field[0]) ? $field[0] : $field;
 
         return $this;
     }
 
     public function orderBy(...$order)
     {
-        $this->orders = is_array($order[0]) ? $order[0] : $order;
+        $this->orders = \is_array($order[0]) ? $order[0] : $order;
 
         return $this;
     }
@@ -251,21 +251,17 @@ class Select implements IExpression, IFieldList
         return $this;
     }
 
-    public function _as($alias)
+    public function as(string $alias)
     {
         return new SourceAlias($this, $alias);
     }
 
-    //TODO Get rid of this method upon migration to PHP 7
-    public function __call($method, $args)
+    /**
+     * @deprecated Use self::as() instead
+     */
+    public function _as($alias)
     {
-        if ($method === 'as') {
-            return $this->_as($args[0]);
-        }
-
-        throw new \RuntimeException('
-            Call to undefined method ' . self::class . '::' . $method
-        );
+        return $this->as($alias);
     }
 
     public function onProcess(IQueryProcessor $processor)
@@ -364,17 +360,17 @@ class Select implements IExpression, IFieldList
 
             if ($on->getTable() === $right) {
                 foreach ($this->reversedSources as $s) {
-                    $fkLeft = $jt->getForeignKey(get_class($s));
+                    $fkLeft = $jt->getForeignKey(\get_class($s));
                     if (!empty($fkLeft)) {
                         break;
                     }
                 }
             } else {
-                $fkLeft = $jt->getForeignKey(get_class($on->getTable()));
+                $fkLeft = $jt->getForeignKey(\get_class($on->getTable()));
             }
 
             $this->_join($type, $jt, $fkLeft);
-            $this->_join($type, $right, $jt->getForeignKey(get_class($right)));
+            $this->_join($type, $right, $jt->getForeignKey(\get_class($right)));
 
         } elseif ($on instanceof OneToN) {
             $this->addJoinClause($type, $right, $this->buildOneToNJoinCriterion($right, $on));
@@ -420,7 +416,7 @@ class Select implements IExpression, IFieldList
         if ($on->getTable() === $right) {
             $left = $this->findLeftJoinTarget($on->getTargetClass());
             $jc = \array_flip($on->getJoinColumns());
-        } elseif (get_class($right) == $on->getTargetClass()) {
+        } elseif (\get_class($right) == $on->getTargetClass()) {
             $left = $on->getTable();
             $this->checkLeftJoinTarget($left);
             $jc = $on->getJoinColumns();
@@ -448,7 +444,7 @@ class Select implements IExpression, IFieldList
         $this->sources[] = new JoinClause($type, $target, $criterion);
 
         if ($this->detectFields) {
-            $this->fields = array_merge($this->fields, $target->getFields());
+            $this->fields = \array_merge($this->fields, $target->getFields());
         }
     }
 }

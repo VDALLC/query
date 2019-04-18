@@ -18,13 +18,13 @@ class Upsert implements IQueryPart
     /**
      * @var Field[]
      */
-    private $insertFields = array();
-    private $insertValues = array();
+    private $insertFields = [];
+    private $insertValues = [];
     /**
      * @var Field[]
      */
-    private $updateFields = array();
-    private $updateValues = array();
+    private $updateFields = [];
+    private $updateValues = [];
 
     public static function upsert()
     {
@@ -133,14 +133,5 @@ class Upsert implements IQueryPart
     public function onProcess(IQueryProcessor $processor)
     {
         return $processor->processUpsertQuery($this);
-    }
-
-    private function normalize($value, $type)
-    {
-        if (!$value instanceof IExpression) {
-            return Operator::constant($value, $type);
-        }
-
-        return $value;
     }
 }

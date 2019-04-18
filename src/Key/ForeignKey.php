@@ -9,7 +9,7 @@ abstract class ForeignKey
 
     public function __construct($targetClass, Table $table = null)
     {
-        $this->targetClass = ltrim($targetClass, '\\');
+        $this->targetClass = \ltrim($targetClass, '\\');
         $this->table = $table;
     }
 

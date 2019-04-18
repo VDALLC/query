@@ -12,9 +12,7 @@ class SourceAlias extends Alias implements ISource
 
     public function getFields()
     {
-        $result = array();
-
-        return array_map(array($this, 'convertExpression'), $this->getExpression()->getFields());
+        return \array_map([$this, 'convertExpression'], $this->getExpression()->getFields());
     }
 
     public function getField($name)

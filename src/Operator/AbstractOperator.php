@@ -2,12 +2,9 @@
 namespace Vda\Query\Operator;
 
 use Vda\Query\Alias;
-use Vda\Query\IQueryProcessor;
 use Vda\Query\IExpression;
+use Vda\Query\IQueryProcessor;
 
-/**
- * @method Alias as($alias)
- */
 abstract class AbstractOperator implements IExpression
 {
     private $mnemonic;
@@ -24,19 +21,17 @@ abstract class AbstractOperator implements IExpression
         return $this->mnemonic;
     }
 
-    public function _as($alias)
+    public function as(string $alias)
     {
         return new Alias($this, $alias);
     }
 
-    //TODO Get rid of this once PHP is fixed to allow keywords as method names
-    public function __call($method, $args)
+    /**
+     * @deprecated Use self::as() instead
+     */
+    public function _as($alias)
     {
-        if ($method === 'as') {
-            return $this->_as($args[0]);
-        }
-
-        trigger_error('Call to undefined method ' . __CLASS__ . '::' . $method, E_USER_ERROR);
+        return $this->as($alias);
     }
 
     protected function normalizeOperand($operand)
