@@ -8,6 +8,7 @@ final class Operator
 {
     const MNEMONIC_CONST              = 'const';
     const MNEMONIC_CALL               = '()';
+    const MNEMONIC_JSONGET            = '->>';
     const MNEMONIC_UNARY_NOT          = '!';
     const MNEMONIC_UNARY_ISNULL       = 'is_null';
     const MNEMONIC_UNARY_NOTNULL      = 'not_null';
@@ -213,6 +214,11 @@ final class Operator
         }
 
         return new BinaryOperator(self::MNEMONIC_BINARY_NOTMATCHI, $operand1, $operand2);
+    }
+
+    public static function jsonget($operand1, string $operand2): JsonGet
+    {
+        return new JsonGet($operand1, $operand2);
     }
 
     /**
